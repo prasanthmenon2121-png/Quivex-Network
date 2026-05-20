@@ -2,8 +2,9 @@ import { useState, useCallback } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { WelcomeScreen } from './pages/WelcomeScreen';
 import { DisplayNameScreen } from './pages/DisplayNameScreen';
+import { RecoveryPhraseScreen } from './pages/RecoveryPhraseScreen';
 
-type Screen = 'welcome' | 'displayName' | 'home';
+type Screen = 'welcome' | 'displayName' | 'recoveryPhrase' | 'home';
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>('welcome');
@@ -14,17 +15,24 @@ function App() {
   }, []);
 
   const handleBack = useCallback(() => {
-    setCurrentScreen('welcome');
-  }, []);
+    if (currentScreen === 'displayName') {
+      setCurrentScreen('welcome');
+    } else if (currentScreen === 'recoveryPhrase') {
+      setCurrentScreen('displayName');
+    }
+  }, [currentScreen]);
 
   const handleDisplayNameContinue = useCallback((name: string) => {
     setDisplayName(name);
-    console.log('Display name set:', name);
-    // TODO: Navigate to next screen (account creation or home)
+    setCurrentScreen('recoveryPhrase');
+  }, []);
+
+  const handleClose = useCallback(() => {
+    setCurrentScreen('welcome');
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-text-primary selection:bg-accent/30">
+    <div className="min-h-screen" style={{ backgroundColor: '#060A06', color: '#F0F7F0' }}>
       <AnimatePresence mode="wait">
         {currentScreen === 'welcome' && (
           <WelcomeScreen
@@ -37,6 +45,13 @@ function App() {
             key="displayName"
             onBack={handleBack}
             onContinue={handleDisplayNameContinue}
+          />
+        )}
+        {currentScreen === 'recoveryPhrase' && (
+          <RecoveryPhraseScreen
+            key="recoveryPhrase"
+            onBack={handleBack}
+            onClose={handleClose}
           />
         )}
       </AnimatePresence>

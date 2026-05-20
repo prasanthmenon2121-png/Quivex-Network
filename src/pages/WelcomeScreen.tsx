@@ -128,10 +128,19 @@ export const WelcomeScreen = ({ onGetStarted }: WelcomeScreenProps) => {
           <span className="text-[9px] text-text-secondary tracking-[0.45em] uppercase" style={{ fontFamily: 'Rajdhani, sans-serif' }}>SECRET PRIVACY NETWORK</span>
         </div>
         <div className="flex items-center gap-3 mb-5 w-full max-w-[300px]">
-          <motion.button onClick={onGetStarted} whileTap={{ scale: 0.97 }} className="flex-1 h-[48px] rounded-full bg-accent text-background text-[14px] font-semibold shadow-glow-sm">
+          <motion.button
+            onClick={onGetStarted}
+            whileTap={{ scale: 0.97 }}
+            className="flex-1 h-[48px] rounded-full text-[14px] font-semibold"
+            style={{ backgroundColor: '#00FF7F', color: '#060A06', boxShadow: '0 0 8px rgba(0,255,127,0.4)' }}
+          >
             Get Started
           </motion.button>
-          <motion.button whileTap={{ scale: 0.97 }} className="flex-1 h-[48px] rounded-full border border-border-strong text-white text-[14px] font-medium hover:border-accent/50 transition-colors">
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            className="flex-1 h-[48px] rounded-full text-[14px] font-medium transition-colors"
+            style={{ border: '1.5px solid rgba(0,255,127,0.2)', color: '#F0F7F0', backgroundColor: 'transparent' }}
+          >
             I have an account
           </motion.button>
         </div>
@@ -180,10 +189,19 @@ export const WelcomeScreen = ({ onGetStarted }: WelcomeScreenProps) => {
 
         {/* Buttons */}
         <div className="flex items-center gap-3 mb-5">
-          <motion.button onClick={onGetStarted} whileTap={{ scale: 0.97 }} className="h-[48px] px-8 rounded-full bg-accent text-background text-[14px] font-semibold hover:bg-accent-dark transition-colors shadow-glow-sm">
+          <motion.button
+            onClick={onGetStarted}
+            whileTap={{ scale: 0.97 }}
+            className="h-[48px] px-8 rounded-full text-[14px] font-semibold transition-colors"
+            style={{ backgroundColor: '#00FF7F', color: '#060A06', boxShadow: '0 0 8px rgba(0,255,127,0.4)' }}
+          >
             Get Started
           </motion.button>
-          <motion.button whileTap={{ scale: 0.97 }} className="h-[48px] px-7 rounded-full border border-border-strong text-white text-[14px] font-medium hover:border-accent/50 transition-colors">
+          <motion.button
+            whileTap={{ scale: 0.97 }}
+            className="h-[48px] px-7 rounded-full text-[14px] font-medium transition-colors"
+            style={{ border: '1.5px solid rgba(0,255,127,0.2)', color: '#F0F7F0', backgroundColor: 'transparent' }}
+          >
             I have an account
           </motion.button>
         </div>

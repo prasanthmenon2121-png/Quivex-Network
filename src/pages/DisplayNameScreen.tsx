@@ -31,9 +31,9 @@ export const DisplayNameScreen = ({ onBack, onContinue }: DisplayNameScreenProps
   const charCount = name.length;
 
   const getCounterColor = () => {
-    if (charCount >= 60) return 'var(--danger)';
-    if (charCount >= 50) return 'var(--warning)';
-    return 'var(--text-secondary)';
+    if (charCount >= 60) return '#FF4538';
+    if (charCount >= 50) return '#FFAB38';
+    return '#8A9E8A';
   };
 
   return (
@@ -69,7 +69,7 @@ export const DisplayNameScreen = ({ onBack, onContinue }: DisplayNameScreenProps
           }}
           aria-label="Tap to change avatar color"
         >
-          <span 
+          <span
             className="text-3xl font-bold text-white uppercase"
             style={{ textShadow: '0 0 10px rgba(0,255,127,0.3)' }}
           >
@@ -85,13 +85,26 @@ export const DisplayNameScreen = ({ onBack, onContinue }: DisplayNameScreenProps
             onChange={handleNameChange}
             placeholder="Enter a display name..."
             autoFocus
-            className="w-full h-[52px] px-5 rounded-xl text-[16px] text-text-primary placeholder:text-placeholder bg-input-bg border-[1.5px] border-border-strong outline-none transition-all focus:border-accent focus:shadow-[0_0_0_3px_rgba(0,255,127,0.12)]"
-            style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
+            className="w-full h-[52px] px-5 rounded-xl text-[16px] outline-none transition-all"
+            style={{
+              fontFamily: 'system-ui, -apple-system, sans-serif',
+              backgroundColor: '#1A211A',
+              border: '1.5px solid rgba(0,255,127,0.15)',
+              color: '#F0F7F0'
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = '#00FF7F';
+              e.target.style.boxShadow = '0 0 0 3px rgba(0,255,127,0.12)';
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = 'rgba(0,255,127,0.15)';
+              e.target.style.boxShadow = 'none';
+            }}
           />
-          
+
           {/* Character Counter */}
           <div className="flex justify-end mt-2">
-            <span 
+            <span
               className="text-[12px]"
               style={{ color: getCounterColor() }}
             >
@@ -105,11 +118,17 @@ export const DisplayNameScreen = ({ onBack, onContinue }: DisplayNameScreenProps
           onClick={() => isValid && onContinue(name.trim())}
           disabled={!isValid}
           whileTap={isValid ? { scale: 0.97 } : undefined}
-          className={`w-full max-w-[340px] h-[52px] rounded-full mt-8 text-[16px] font-semibold transition-all ${
-            isValid
-              ? 'bg-gradient-to-r from-accent to-secondary text-background cursor-pointer shadow-glow-md'
-              : 'bg-accent/20 text-accent/50 cursor-not-allowed'
-          }`}
+          className={`w-full max-w-[340px] h-[52px] rounded-full mt-8 text-[16px] font-semibold transition-all ${isValid
+            ? 'cursor-pointer'
+            : 'cursor-not-allowed'
+            }`}
+          style={{
+            background: isValid
+              ? 'linear-gradient(135deg, #00FF7F, #39FF14)'
+              : 'rgba(0,255,127,0.2)',
+            color: isValid ? '#060A06' : 'rgba(0,255,127,0.5)',
+            boxShadow: isValid ? '0 0 20px rgba(0,255,127,0.35)' : 'none'
+          }}
         >
           Continue
         </motion.button>
