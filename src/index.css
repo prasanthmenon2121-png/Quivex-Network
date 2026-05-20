@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #060A06;
+  --surface: #0D120D;
+  --card-deeper: #111811;
+  --card-hover: #161E16;
+  --input-bg: #1A211A;
+  --border: rgba(0, 255, 127, 0.08);
+  --border-strong: rgba(0, 255, 127, 0.15);
+  --accent: #00FF7F;
+  --secondary: #39FF14;
+  --accent-dark: #00E070;
+  --text-primary: #F0F7F0;
+  --text-secondary: #8A9E8A;
+  --placeholder: #4A5E4A;
+  --danger: #FF4538;
+  --warning: #FFAB38;
+
+  /* Glow effects */
+  --glow-sm: 0 0 8px rgba(0, 255, 127, 0.4);
+  --glow-md: 0 0 20px rgba(0, 255, 127, 0.35);
+  --glow-lg: 0 0 40px rgba(0, 255, 127, 0.3);
+
+  /* QVEX MODE */
+  --qvex-bg: #040804;
+  --qvex-primary: #00E070;
+  --qvex-glow: rgba(0, 224, 112, 0.3);
+
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: var(--text-primary);
+  background-color: var(--background);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+input,
+button {
+  font-size: 16px !important;
+}
+
+/* Custom glow effects */
+.glow-green {
+  box-shadow: 0 0 20px rgba(0, 255, 127, 0.4);
+}
+
+.glow-text {
+  text-shadow: 0 0 10px rgba(0, 255, 127, 0.5);
+}

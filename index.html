@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+  <!-- App Info -->
+  <title>QuiVex - Private Messenger</title>
+  <meta name="description" content="QuiVex - Private Messenger. Secure, Private, Fast." />
+  <meta name="author" content="QuiVex" />
+
+  <!-- Theme Colors -->
+  <meta name="theme-color" content="#060A06" />
+  <meta name="msapplication-TileColor" content="#060A06" />
+  <meta name="msapplication-navbutton-color" content="#00FF7F" />
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/icons/icon-32.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@600;700&family=Audiowide&family=Black+Ops+One&family=Teko:wght@600;700&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-16.png" />
+  <link rel="icon" type="image/svg+xml" href="/icons/logo.svg" />
+  <link rel="shortcut icon" href="/icons/icon-48.png" />
+
+  <!-- Apple iOS Icons -->
+  <link rel="apple-touch-icon" href="/icons/icon-180.png" />
+  <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.png" />
+  <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-167.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.png" />
+
+  <!-- Apple iOS PWA Settings -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="QuiVex" />
+
+  <!-- Apple Splash Screens (iPhone/iPad) -->
+  <link rel="apple-touch-startup-image" href="/icons/splash-640x1136.png"
+    media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" />
+  <link rel="apple-touch-startup-image" href="/icons/splash-750x1334.png"
+    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" />
+  <link rel="apple-touch-startup-image" href="/icons/splash-1242x2208.png"
+    media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/icons/splash-1125x2436.png"
+    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" />
+  <link rel="apple-touch-startup-image" href="/icons/splash-1536x2048.png"
+    media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" />
+  <link rel="apple-touch-startup-image" href="/icons/splash-1668x2224.png"
+    media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2)" />
+  <link rel="apple-touch-startup-image" href="/icons/splash-2048x2732.png"
+    media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" />
+
+  <!-- Microsoft Windows Tiles -->
+  <meta name="msapplication-TileImage" content="/icons/icon-144.png" />
+  <meta name="msapplication-square70x70logo" content="/icons/icon-72.png" />
+  <meta name="msapplication-square150x150logo" content="/icons/icon-152.png" />
+  <meta name="msapplication-wide310x150logo" content="/icons/icon-310x150.png" />
+  <meta name="msapplication-square310x310logo" content="/icons/icon-310.png" />
+
+  <!-- Android Chrome -->
+  <meta name="mobile-web-app-capable" content="yes" />
+
+  <!-- Disable phone number detection -->
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- Safe Area for notched devices -->
+  <style>
+    body {
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
