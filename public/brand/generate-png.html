@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUIVEX QX Logo - PNG Generator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Sora', system-ui, sans-serif;
+      background: #050607;
+      color: #F4F6F5;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    h1 { font-size: 24px; margin-bottom: 32px; font-weight: 600; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: #101314;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 24px;
+    }
+    .card h3 {
+      font-size: 14px;
+      color: #8B9490;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .preview {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #050607;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    canvas { display: block; }
+    button {
+      width: 100%;
+      height: 48px;
+      background: #16C784;
+      color: #050607;
+      border: none;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button:hover { background: #0E8F62; }
+    .sizes { display: flex; gap: 8px; margin-bottom: 12px; }
+    .sizes button {
+      flex: 1;
+      height: 36px;
+      background: #161A1B;
+      color: #8B9490;
+      font-size: 12px;
+    }
+    .sizes button.active {
+      background: #16C784;
+      color: #050607;
+    }
+  </style>
+</head>
+<body>
+  <h1>QUIVEX QX Logo — PNG Export</h1>
+  
+  <div class="grid">
+    <!-- Logo on Dark -->
+    <div class="card">
+      <h3>QX Logo (Dark Background)</h3>
+      <div class="preview" id="preview1"></div>
+      <div class="sizes" id="sizes1">
+        <button data-size="128">128px</button>
+        <button data-size="256">256px</button>
+        <button data-size="512" class="active">512px</button>
+        <button data-size="1024">1024px</button>
+      </div>
+      <button onclick="downloadLogo('dark', currentSize1)">Download PNG</button>
+    </div>
+
+    <!-- Logo Transparent -->
+    <div class="card">
+      <h3>QX Logo (Transparent)</h3>
+      <div class="preview" id="preview2" style="background: repeating-conic-gradient(#1a1a1a 0% 25%, #0a0a0a 0% 50%) 50% / 20px 20px;"></div>
+      <div class="sizes" id="sizes2">
+        <button data-size="128">128px</button>
+        <button data-size="256">256px</button>
+        <button data-size="512" class="active">512px</button>
+        <button data-size="1024">1024px</button>
+      </div>
+      <button onclick="downloadLogo('transparent', currentSize2)">Download PNG</button>
+    </div>
+
+    <!-- Icon with Border -->
+    <div class="card">
+      <h3>QX App Icon</h3>
+      <div class="preview" id="preview3"></div>
+      <div class="sizes" id="sizes3">
+        <button data-size="128">128px</button>
+        <button data-size="256">256px</button>
+        <button data-size="512" class="active">512px</button>
+        <button data-size="1024">1024px</button>
+      </div>
+      <button onclick="downloadIcon(currentSize3)">Download PNG</button>
+    </div>
+  </div>
+
+  <script>
+    let currentSize1 = 512;
+    let currentSize2 = 512;
+    let currentSize3 = 512;
+
+    function drawLogo(canvas, size, transparent = false) {
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      const scale = size / 512;
+      
+      // Background
+      if (!transparent) {
+        ctx.fillStyle = '#050607';
+        ctx.beginPath();
+        ctx.roundRect(0, 0, size, size, 96 * scale);
+        ctx.fill();
+      }
+      
+      // Q letter
+      ctx.font = `300 ${280 * scale}px Sora, sans-serif`;
+      ctx.fillStyle = '#F4F6F5';
+      ctx.fillText('Q', 130 * scale, 340 * scale);
+      
+      // X letter
+      ctx.font = `700 ${200 * scale}px Sora, sans-serif`;
+      ctx.fillStyle = '#16C784';
+      ctx.fillText('X', 275 * scale, 340 * scale);
+    }
+
+    function drawIcon(canvas, size) {
+      canvas.width = size;
+      canvas.height = size;
+      const ctx = canvas.getContext('2d');
+      
+      const scale = size / 512;
+      const radius = 96 * scale;
+      
+      // Background
+      ctx.fillStyle = '#101314';
+      ctx.beginPath();
+      ctx.roundRect(0, 0, size, size, radius);
+      ctx.fill();
+      
+      // Border
+      ctx.strokeStyle = 'rgba(22, 199, 132, 0.24)';
+      ctx.lineWidth = 6 * scale;
+      ctx.beginPath();
+      ctx.roundRect(3 * scale, 3 * scale, size - 6 * scale, size - 6 * scale, radius - 3 * scale);
+      ctx.stroke();
+      
+      // Q letter
+      ctx.font = `300 ${280 * scale}px Sora, sans-serif`;
+      ctx.fillStyle = '#F4F6F5';
+      ctx.fillText('Q', 120 * scale, 345 * scale);
+      
+      // X letter
+      ctx.font = `700 ${200 * scale}px Sora, sans-serif`;
+      ctx.fillStyle = '#16C784';
+      ctx.fillText('X', 270 * scale, 345 * scale);
+    }
+
+    function downloadLogo(type, size) {
+      const canvas = document.createElement('canvas');
+      drawLogo(canvas, size, type === 'transparent');
+      
+      const link = document.createElement('a');
+      link.download = `qx-logo-${type}-${size}px.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function downloadIcon(size) {
+      const canvas = document.createElement('canvas');
+      drawIcon(canvas, size);
+      
+      const link = document.createElement('a');
+      link.download = `qx-icon-${size}px.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function setupSizeButtons(containerId, previewId, drawFn, sizeVar) {
+      const container = document.getElementById(containerId);
+      const preview = document.getElementById(previewId);
+      
+      container.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          container.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const size = parseInt(btn.dataset.size);
+          
+          if (sizeVar === 1) currentSize1 = size;
+          if (sizeVar === 2) currentSize2 = size;
+          if (sizeVar === 3) currentSize3 = size;
+          
+          updatePreview(previewId, drawFn, Math.min(size, 256));
+        });
+      });
+    }
+
+    function updatePreview(previewId, drawFn, displaySize) {
+      const preview = document.getElementById(previewId);
+      preview.innerHTML = '';
+      const canvas = document.createElement('canvas');
+      drawFn(canvas, displaySize);
+      canvas.style.borderRadius = '12px';
+      preview.appendChild(canvas);
+    }
+
+    // Initialize
+    document.fonts.ready.then(() => {
+      setupSizeButtons('sizes1', 'preview1', (c, s) => drawLogo(c, s, false), 1);
+      setupSizeButtons('sizes2', 'preview2', (c, s) => drawLogo(c, s, true), 2);
+      setupSizeButtons('sizes3', 'preview3', drawIcon, 3);
+      
+      updatePreview('preview1', (c, s) => drawLogo(c, s, false), 256);
+      updatePreview('preview2', (c, s) => drawLogo(c, s, true), 256);
+      updatePreview('preview3', drawIcon, 256);
+    });
+  </script>
+</body>
+</html>

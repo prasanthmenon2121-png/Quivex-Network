@@ -1,83 +1,138 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 interface QuivexLogoProps {
   className?: string;
   size?: 'sm' | 'md' | 'lg' | number;
-  variant?: 'full' | 'icon' | 'wordmark' | 'lockup';
+  variant?: 'icon' | 'wordmark' | 'lockup';
 }
 
-export const QuivexLogo: React.FC<QuivexLogoProps> = ({
+export function QuivexLogo({
   className = '',
   size = 'md',
   variant = 'wordmark'
-}) => {
+}: QuivexLogoProps) {
   const [iconError, setIconError] = useState(false);
+  const [iconLoaded, setIconLoaded] = useState(false);
   const [wordmarkError, setWordmarkError] = useState(false);
+  const [wordmarkLoaded, setWordmarkLoaded] = useState(false);
 
-  const getDimension = () => {
+  const getDimension = (): number => {
     if (typeof size === 'number') return size;
     switch (size) {
-      case 'sm': return 48;
-      case 'lg': return 192;
-      default: return 96;
+      case 'sm': return 32;
+      case 'lg': return 64;
+      default: return 48;
     }
   };
 
   const dimension = getDimension();
 
-  const renderIcon = (customDim?: number) => {
-    const dim = customDim || dimension;
-    if (iconError) return null;
+  const getBorderRadius = (dim: number): number => {
+    if (dim >= 96) return 26;
+    if (dim >= 64) return 22;
+    if (dim >= 48) return 16;
+    return 12;
+  };
+
+  const renderFallbackIcon = (dim: number) => (
+    <div
+      className="flex items-center justify-center bg-surface border border-accent-border select-none"
+      style={{
+        width: dim,
+        height: dim,
+        minWidth: dim,
+        minHeight: dim,
+        borderRadius: getBorderRadius(dim),
+      }}
+    >
+      <span
+        className="text-accent leading-none"
+        style={{
+          fontSize: `${dim * 0.52}px`,
+          fontWeight: 700,
+          fontFamily: 'Inter, Sora, ui-sans-serif, sans-serif',
+        }}
+      >
+        Q
+      </span>
+    </div>
+  );
+
+  const renderFallbackWordmark = (dim: number) => (
+    <span
+      className="text-text select-none"
+      style={{
+        fontSize: `${Math.min(dim * 0.14, 32)}px`,
+        fontWeight: 700,
+        fontFamily: 'Inter, Sora, ui-sans-serif, sans-serif',
+        letterSpacing: '0.18em',
+      }}
+    >
+      QUIVEX
+    </span>
+  );
+
+  const renderIcon = (dim: number) => {
+    if (iconError) {
+      return renderFallbackIcon(dim);
+    }
     return (
-      <img
-        src="/icons/icon-512.png"
-        alt=""
-        className="object-contain"
-        style={{ width: dim, height: dim }}
-        onError={() => setIconError(true)}
-      />
+      <div className="relative" style={{ width: dim, height: dim }}>
+        {!iconLoaded && renderFallbackIcon(dim)}
+        <img
+          src="/icons/icon-512.png"
+          alt="QUIVEX"
+          className={`object-contain absolute inset-0 transition-opacity duration-200 ${iconLoaded ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+          style={{ width: dim, height: dim }}
+          onLoad={() => setIconLoaded(true)}
+          onError={() => setIconError(true)}
+        />
+      </div>
     );
   };
 
-  const renderWordmark = (customDim?: number) => {
-    const dim = customDim || dimension;
-    if (wordmarkError) return null;
+  const renderWordmark = (dim: number) => {
+    if (wordmarkError) {
+      return renderFallbackWordmark(dim);
+    }
     return (
-      <img
-        src="/brand/quivex-wordmark.png"
-        alt=""
-        className="object-contain"
-        style={{ height: dim * 0.6 }}
-        onError={() => setWordmarkError(true)}
-      />
+      <div className="relative flex items-center" style={{ height: dim * 0.6 }}>
+        {!wordmarkLoaded && renderFallbackWordmark(dim)}
+        <img
+          src="/brand/quivex-wordmark.png"
+          alt="QUIVEX"
+          className={`object-contain transition-opacity duration-200 ${wordmarkLoaded ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+          style={{ height: dim * 0.6 }}
+          onLoad={() => setWordmarkLoaded(true)}
+          onError={() => setWordmarkError(true)}
+        />
+      </div>
     );
   };
 
-  // 1. ICON ONLY
   if (variant === 'icon') {
     return (
       <div className={`flex items-center justify-center ${className}`}>
-        {renderIcon()}
+        {renderIcon(dimension)}
       </div>
     );
   }
 
-  // 2. WORDMARK ONLY
-  if (variant === 'wordmark' || variant === 'full') {
+  if (variant === 'wordmark') {
     return (
       <div className={`flex items-center justify-center ${className}`}>
-        {renderWordmark()}
+        {renderWordmark(dimension)}
       </div>
     );
   }
 
-  // 3. LOCKUP (Icon + Wordmark)
   if (variant === 'lockup') {
     return (
       <div className={`flex items-center gap-3 ${className}`}>
-        {renderIcon(dimension * 0.7)}
-        <div className="h-6 w-[1px] bg-white/10 mx-1 hidden sm:block" />
-        {renderWordmark(dimension)}
+        {renderIcon(dimension * 0.8)}
+        {renderWordmark(dimension * 0.9)}
       </div>
     );
   }

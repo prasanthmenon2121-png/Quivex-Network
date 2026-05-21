@@ -1,0 +1,6 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="96" fill="#101314"/>
+  <rect x="4" y="4" width="504" height="504" rx="92" stroke="#16C784" stroke-opacity="0.24" stroke-width="8" fill="none"/>
+  <text x="130" y="350" font-family="Sora, Inter, system-ui, sans-serif" font-size="300" font-weight="300" fill="#F4F6F5">Q</text>
+  <text x="285" y="350" font-family="Sora, Inter, system-ui, sans-serif" font-size="210" font-weight="700" fill="#16C784">X</text>
+</svg>

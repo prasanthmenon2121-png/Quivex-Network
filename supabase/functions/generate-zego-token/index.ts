@@ -48,22 +48,6 @@ serve(async (req) => {
     // Generate a random 16-byte nonce
     const nonce = crypto.randomUUID().replace(/-/g, '').substring(0, 16)
     
-    // Create the token payload
-    const payload = {
-      app_id: appId,
-      user_id: userId,
-      room_id: roomId,
-      privilege: {
-        1: 1, // login
-        2: 1  // publish
-      },
-      create_time: Math.floor(Date.now() / 1000),
-      expire_time: expireAt,
-      nonce: nonce
-    }
-
-    const payloadStr = JSON.stringify(payload)
-    
     // For ZEGOCLOUD tokens, the server secret is used to sign the payload.
     // The exact algorithm involves base64 encoding the payload and appending a signature.
     // Here we provide a structured response that the frontend ZegoExpressEngine can use.

@@ -13,7 +13,9 @@ import { NewConversationScreen } from './screens/NewConversationScreen';
 import { ConversationsScreen } from './screens/ConversationsScreen';
 import { ContactsScreen } from './screens/ContactsScreen';
 import { MessageRequestsScreen } from './screens/MessageRequestsScreen';
-import SettingsScreen from './screens/SettingsScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
+import CommunitiesScreen from './screens/CommunitiesScreen';
+
 
 const PlaceholderScreen = ({ title, description }: { title: string; description: string }) => (
   <div className="flex flex-col items-center justify-center h-full min-h-[400px] text-center p-6 animate-in fade-in duration-300">
@@ -125,10 +127,7 @@ function AppContent() {
         />
         <Route path="/contacts" element={<ContactsScreen />} />
         <Route path="/requests" element={<MessageRequestsScreen />} />
-        <Route
-          path="/communities"
-          element={<PlaceholderScreen title="Communities" description="Encrypted community spaces will appear here." />}
-        />
+        <Route path="/communities" element={<CommunitiesScreen />} />
         <Route
           path="/calls"
           element={<PlaceholderScreen title="Calls" description="Private voice and video call history will appear here." />}

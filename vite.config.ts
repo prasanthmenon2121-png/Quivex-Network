@@ -10,34 +10,28 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'icons/*.png'],
+      includeAssets: ['apple-touch-icon.png', 'icons/*.png'],
       manifest: {
         name: 'QUIVEX',
         short_name: 'QUIVEX',
-        description: 'Private. Reimagined.',
-        theme_color: '#050505',
-        background_color: '#050505',
+        description: 'Private messaging, redefined.',
+        theme_color: '#000000',
+        background_color: '#000000',
         display: 'standalone',
         orientation: 'portrait',
         icons: [
           {
-            src: 'icons/icon-192.png',
+            src: 'icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: 'icons/icon-512.png',
+            src: 'icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: 'icons/maskable-192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'maskable'
-          },
-          {
-            src: 'icons/maskable-512.png',
+            src: 'icons/maskable-icon.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'

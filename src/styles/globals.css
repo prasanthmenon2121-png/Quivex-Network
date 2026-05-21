@@ -1,178 +1,129 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #020807;
-  --color-bg-deep: #000403;
-  --color-surface: #07110f;
-  --color-surface-2: #0b1915;
-  --color-card: rgba(9, 22, 18, 0.72);
-  --color-border: rgba(255, 255, 255, 0.10);
-  --color-border-green: rgba(57, 255, 20, 0.24);
-  --color-text: #F4F7F5;
-  --color-muted: rgba(244, 247, 245, 0.68);
-  --color-accent: #00C776;
-  --color-accent-dark: #008F57;
-  --color-accent-soft: rgba(0, 199, 118, 0.10);
-  --color-accent-border: rgba(0, 199, 118, 0.22);
-  --color-danger: #ff4538;
+  --color-bg: #0a0a0b;
+  --color-bg-deep: #050506;
+  --color-bg-soft: #090B0C;
 
-  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", "Geist Mono", monospace;
+  --color-surface: #101314;
+  --color-surface-2: #161A1B;
+  --color-surface-3: #1C2223;
+
+  --color-card: rgba(18, 22, 23, 0.82);
+  --color-card-solid: #121617;
+
+  --color-text: #F4F6F5;
+  --color-muted: #8B9490;
+  --color-soft-muted: #5F6864;
+
+  --color-accent: #16C784;
+  --color-accent-dark: #0E8F62;
+  --color-accent-soft: rgba(22, 199, 132, 0.12);
+  --color-accent-border: rgba(22, 199, 132, 0.24);
+
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+
+  --color-danger: #FF5A52;
+  --color-warning: #E6B450;
+
+  --font-sans: Inter, Sora, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 :root {
-  --bg: #020807;
-  --bg-deep: #000403;
-  --surface: #07110f;
-  --surface-2: #0b1915;
-  --card: rgba(9, 22, 18, 0.72);
-  --border: rgba(255, 255, 255, 0.10);
-  --border-green: rgba(57, 255, 20, 0.24);
-  --text: #F4F7F5;
-  --muted: rgba(244, 247, 245, 0.68);
-  --accent: #00C776;
-  --accent-dark: #008F57;
-  --accent-soft: rgba(0, 199, 118, 0.10);
-  --accent-border: rgba(0, 199, 118, 0.22);
-  --danger: #ff4538;
+  --bg: #0a0a0b;
+  --bg-deep: #050506;
+  --bg-soft: #090B0C;
+
+  --surface: #101314;
+  --surface-2: #161A1B;
+  --surface-3: #1C2223;
+
+  --card: rgba(18, 22, 23, 0.82);
+  --card-solid: #121617;
+
+  --text: #F4F6F5;
+  --muted: #8B9490;
+  --soft-muted: #5F6864;
+
+  --accent: #16C784;
+  --accent-dark: #0E8F62;
+  --accent-soft: rgba(22, 199, 132, 0.12);
+  --accent-border: rgba(22, 199, 132, 0.24);
+
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --danger: #FF5A52;
+  --warning: #E6B450;
+
   color-scheme: dark;
 }
 
-/* Base reset, body background, font */
+/* Base reset */
 * {
   box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
   margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-html, body, #root {
-  width: 100%;
-  height: 100%;
-  background-color: var(--bg-deep);
+  background: var(--bg);
   color: var(--text);
-  font-family: var(--font-sans);
-  /* Safe-area support for mobile PWA */
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  padding-left: env(safe-area-inset-left, 0px);
-  padding-right: env(safe-area-inset-right, 0px);
 }
 
-/* Scroll behavior: no tiny internal scrollbars, natural main scroll */
 body {
   overflow-x: hidden;
-  overflow-y: auto;
+  font-family: Inter, Sora, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -webkit-overflow-scrolling: touch;
 }
 
-/* Custom premium scrollbar for main scroll */
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Custom premium scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-deep);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+  background: var(--border-strong);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--accent-border);
 }
 
-/* Global utility classes for premium dark theme buttons and cards */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background-color: var(--accent);
-  color: var(--bg-deep);
-  font-weight: 700;
-  border-radius: 12px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid var(--accent-border);
-  cursor: pointer;
-  font-size: 14px;
+/* Safe Area Utilities */
+.safe-screen {
+  min-height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-.btn-primary:hover:not(:disabled) {
-  filter: brightness(1.1);
+.safe-area-pt {
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
-.btn-primary:active:not(:disabled) {
-  transform: scale(0.98);
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-.btn-primary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 24px;
-  background-color: var(--surface-2);
-  color: var(--text);
-  font-weight: 700;
-  border-radius: 12px;
-  transition: all 0.2s ease-in-out;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.btn-secondary:hover:not(:disabled) {
-  background-color: var(--surface);
-  border-color: var(--accent-border);
-}
-
-.btn-secondary:active:not(:disabled) {
-  transform: scale(0.98);
-}
-
-.btn-secondary:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.input-premium {
-  width: 100%;
-  background-color: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 14px 20px;
-  color: var(--text);
-  font-weight: 500;
-  outline: none;
-  transition: all 0.3s ease-in-out;
-  font-size: 15px;
-}
-
-.input-premium::placeholder {
-  color: var(--muted);
-  opacity: 0.3;
-}
-
-.input-premium:focus {
-  border-color: var(--accent-border);
-  box-shadow: 0 0 0 2px var(--accent-soft);
-}
-
-.card-premium {
-  background-color: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(12px);
+.safe-area-px {
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }

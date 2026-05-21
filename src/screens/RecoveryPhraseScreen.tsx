@@ -1,208 +1,134 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from 'sonner';
-import { Copy, Check, Eye, EyeOff, Lock, ShieldCheck, ChevronLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { ConnectionStatus } from '../components/system/ConnectionStatus';
+import { useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ChevronLeft, Eye, EyeOff, AlertTriangle } from 'lucide-react';
 
 interface RecoveryPhraseScreenProps {
   phrase: string;
   onConfirm: () => void;
+  onBack?: () => void;
 }
 
-const TopBarWordmark: React.FC = () => {
-  const [err, setErr] = useState(false);
-  if (err) return <span className="font-black text-sm tracking-widest text-text">QUIVEX</span>;
-  return (
-    <img
-      src="/brand/quivex-wordmark.png"
-      alt="QUIVEX"
-      className="object-contain brightness-110"
-      style={{ height: 24 }}
-      onError={() => setErr(true)}
-    />
-  );
-};
-
-const SecureBackupIcon: React.FC = () => {
-  const [err, setErr] = useState(false);
-  if (err) {
-    return (
-      <div className="w-8 h-8 rounded-lg bg-accent-soft flex items-center justify-center shrink-0 border border-accent-border">
-        <Lock className="w-4 h-4 text-accent" />
-      </div>
-    );
-  }
-  return (
-    <img
-      src="/icons/qx-icon.png"
-      alt="QX"
-      className="object-contain rounded-lg border border-accent-border bg-accent-soft p-1"
-      style={{ width: 32, height: 32 }}
-      onError={() => setErr(true)}
-    />
-  );
-};
-
-const RecoveryPhraseScreen: React.FC<RecoveryPhraseScreenProps> = ({ phrase, onConfirm }) => {
+function RecoveryPhraseScreen({ phrase, onConfirm, onBack }: RecoveryPhraseScreenProps) {
   const [isRevealed, setIsRevealed] = useState(false);
   const [hasSaved, setHasSaved] = useState(false);
-  const [hasCopied, setHasCopied] = useState(false);
-  const navigate = useNavigate();
+  const prefersReducedMotion = useReducedMotion();
 
-  const words = phrase.split(' ');
+  const words = phrase.split(' ').filter(Boolean);
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(phrase);
-    setHasCopied(true);
-    toast.success('Recovery phrase copied to clipboard', {
-      icon: <Lock className="w-4 h-4 text-accent" />
-    });
-    setTimeout(() => setHasCopied(false), 2000);
-  };
-
-  const handleBack = () => {
-    navigate('/display-name');
+  const handleContinue = () => {
+    if (!hasSaved) return;
+    onConfirm();
   };
 
   return (
-    <div className="h-full flex flex-col bg-bg-deep text-text overflow-hidden select-none animate-in fade-in duration-300">
-      {/* Top Bar Header */}
-      <header className="w-full flex items-center justify-between px-6 py-3 border-b border-border/50 bg-bg/85 backdrop-blur-md sticky top-0 z-50 shrink-0">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={handleBack}
-            className="p-2 -ml-2 text-muted hover:text-text transition-colors rounded-lg flex items-center justify-center min-h-[40px] min-w-[40px] cursor-pointer"
-            aria-label="Go back"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <TopBarWordmark />
-        </div>
-        <ConnectionStatus />
-      </header>
+    <div className="fixed inset-0 bg-[#000000] overflow-hidden">
+      <div className="h-[100dvh] flex flex-col safe-area-pt safe-area-pb">
+        {/* Header */}
+        <header className={`flex items-center px-4 shrink-0 ${onBack ? 'h-12 sm:h-14' : 'h-3 sm:h-4'}`}>
+          {onBack && (
+            <button
+              onClick={onBack}
+              className="w-10 h-10 flex items-center justify-center text-muted hover:text-text transition-colors rounded-lg -ml-2"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+          )}
+        </header>
 
-      {/* Main Page Area */}
-      <div className="w-full max-w-[680px] mx-auto px-6 py-4 flex-1 flex flex-col justify-between overflow-hidden">
-        <div className="flex flex-col gap-3.5 shrink-0">
-          <div className="text-center">
-            <h2 className="text-2xl sm:text-3xl font-black tracking-tight mb-1 text-text">Recovery Phrase</h2>
-            <p className="text-muted text-xs sm:text-sm font-medium leading-relaxed max-w-[400px] mx-auto">
-              Save this 13-word phrase in a secure location. It is the only way to recover your account.
+        {/* Content */}
+        <motion.div
+          className="flex-1 min-h-0 flex flex-col px-4 sm:px-6 lg:px-8 w-full max-w-[820px] mx-auto pb-3 sm:pb-5"
+          initial={prefersReducedMotion ? false : { opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.25 }}
+        >
+          {/* Title */}
+          <div className="text-center mb-3 sm:mb-5">
+            <h1 className="text-[25px] sm:text-[32px] font-bold text-text mb-2">
+              Recovery phrase
+            </h1>
+            <p className="text-[13px] sm:text-[16px] text-muted leading-snug sm:leading-relaxed max-w-[560px] mx-auto">
+              Save this 13-word phrase. It is the only way to restore your QUIVEX identity.
             </p>
           </div>
 
-          {/* Warning Section */}
-          <div className="p-3.5 bg-card border border-border rounded-xl flex items-start gap-3 transition-all hover:border-accent-border/30">
-            <SecureBackupIcon />
+          {/* Warning */}
+          <div className="flex items-start gap-3 p-3 sm:p-4 bg-[#0B0B0B] rounded-2xl border border-[#E6B450]/40 mb-3 sm:mb-5">
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#E6B450]/10 flex items-center justify-center shrink-0">
+              <AlertTriangle className="w-4 h-4 text-[#E6B450]" />
+            </div>
             <div>
-              <h4 className="text-accent font-bold text-[10px] uppercase tracking-widest mb-0.5">Important</h4>
-              <p className="text-muted text-xs font-medium leading-relaxed">
+              <p className="text-[13px] font-semibold text-[#E6B450] mb-0.5">Important</p>
+              <p className="text-[12px] sm:text-[13px] text-[#F4F6F5] leading-snug sm:leading-relaxed">
                 If you lose this phrase, your account cannot be recovered. Save it offline.
               </p>
             </div>
           </div>
-        </div>
 
-        {/* Phrase Card Grid Container */}
-        <div className="relative my-3 flex-1 flex flex-col justify-center min-h-0">
-          <motion.div
-            className={`grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 p-5 bg-card rounded-xl border transition-all duration-500 relative overflow-y-auto max-h-full ${
-              !isRevealed 
-                ? 'border-border/30 blur-[12px] select-none opacity-40' 
-                : 'border-border opacity-100'
-            }`}
-            animate={{ filter: isRevealed ? 'blur(0px)' : 'blur(16px)' }}
-            transition={{ duration: 0.3 }}
-          >
-            {words.map((word, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-2 bg-surface-2 px-3 py-2 rounded-lg border border-border/40 hover:border-accent-border/40 transition-colors"
-              >
-                <span className="text-[11px] font-mono font-bold text-accent/40 w-4 text-right shrink-0">{idx + 1}</span>
-                <span className="font-semibold text-sm tracking-tight text-text select-all">{word}</span>
-              </div>
-            ))}
-          </motion.div>
-
-          {!isRevealed && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-[2px] rounded-xl">
-              <button
-                onClick={() => setIsRevealed(true)}
-                className="flex items-center gap-2 bg-accent text-bg-deep px-5 py-2.5 rounded-lg font-bold text-sm hover:brightness-110 active:scale-[0.97] transition-all cursor-pointer min-h-[44px] select-none border border-accent-border shadow-md"
-              >
-                <Eye className="w-4 h-4" />
-                <span>Reveal Phrase</span>
-              </button>
+          {/* Phrase Grid */}
+          <div className="relative mb-3 sm:mb-4 min-h-0">
+            <div
+              className={`grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 p-3 sm:p-4 bg-[#101314] rounded-2xl border border-white/[0.08] transition-all duration-200 ${!isRevealed ? 'blur-md select-none pointer-events-none' : ''}`}
+            >
+              {words.map((word, idx) => (
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 min-w-0 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-[#0B0D0E] rounded-xl border border-white/5"
+                >
+                  <span className="text-[10px] sm:text-[11px] font-mono text-muted/60 w-4 sm:w-5 text-right shrink-0">
+                    {idx + 1}
+                  </span>
+                  <span className="text-[12px] sm:text-[14px] font-medium text-text truncate">
+                    {word}
+                  </span>
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-
-        {/* Verification / Action Buttons */}
-        <div className="flex items-center justify-between mb-3 gap-4 shrink-0">
-          <div className="flex items-center gap-1.5 text-accent/50 text-[11px] font-bold uppercase tracking-widest select-none">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Verified Secure</span>
           </div>
-          <div className="flex gap-2">
+
+          {/* Reveal Toggle */}
+          <div className="flex justify-center mb-3 sm:mb-5">
             <button
-              onClick={() => setIsRevealed(!isRevealed)}
-              className="p-2 bg-card hover:bg-card/80 rounded-lg border border-border hover:border-accent-border text-muted hover:text-text transition-all disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px] min-w-[40px] flex items-center justify-center cursor-pointer"
-              disabled={!isRevealed}
-              title={isRevealed ? "Hide Phrase" : "Reveal Phrase"}
+              onClick={() => setIsRevealed((prev) => !prev)}
+              className="flex items-center gap-2 px-5 sm:px-6 h-10 sm:h-12 rounded-xl border border-[#00D9A3]/60 text-[#00D9A3] bg-transparent text-sm font-medium transition-colors hover:border-[#00D9A3] active:scale-[0.99]"
             >
               {isRevealed ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={handleCopy}
-              className="flex items-center gap-1.5 bg-card hover:bg-card/80 px-4 py-2 rounded-lg border border-border hover:border-accent-border text-text font-bold text-xs uppercase tracking-widest transition-all disabled:opacity-40 disabled:cursor-not-allowed min-h-[40px] cursor-pointer"
-              disabled={!isRevealed}
-            >
-              {hasCopied ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-accent" />
-                  <span className="text-accent">Copied</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-3.5 h-3.5 text-muted" />
-                  <span>Copy</span>
-                </>
-              )}
+              <span>{isRevealed ? 'Hide phrase' : 'Reveal phrase'}</span>
             </button>
           </div>
-        </div>
 
-        {/* Confirm Checkbox & Continue */}
-        <div className="space-y-3 shrink-0">
-          <label className="flex items-start gap-2.5 p-3 bg-card/30 rounded-xl border border-border hover:border-accent-border cursor-pointer group transition-all select-none min-h-[44px]">
-            <div className="mt-0.5 flex items-center justify-center min-w-[20px] min-h-[20px]">
+          {/* Spacer */}
+          <div className="flex-1 min-h-1" />
+
+          {/* Confirmation */}
+          <div className="mt-auto shrink-0">
+            <label className="flex items-start gap-3 p-3 sm:p-4 bg-[#101314] rounded-xl border border-white/[0.08] cursor-pointer mb-3 min-h-[48px] sm:min-h-[52px]">
               <input
                 type="checkbox"
                 checked={hasSaved}
                 onChange={(e) => setHasSaved(e.target.checked)}
-                className="w-4 h-4 rounded border-border bg-surface-2 text-accent focus:ring-accent cursor-pointer transition-colors"
+                className="w-5 h-5 rounded border-white/20 bg-[#0B0D0E] accent-[#7C5CFF] focus:ring-[#7C5CFF]/40 cursor-pointer shrink-0"
               />
-            </div>
-            <span className="text-muted group-hover:text-text text-sm font-medium leading-relaxed transition-colors">
-              I have securely saved my recovery phrase and understand it cannot be recovered if lost.
-            </span>
-          </label>
+              <span className="text-[13px] sm:text-[14px] text-muted leading-snug sm:leading-relaxed">
+                I have saved my recovery phrase
+              </span>
+            </label>
 
-          <motion.button
-            whileTap={{ scale: 0.98 }}
-            onClick={onConfirm}
-            disabled={!hasSaved}
-            className="w-full flex items-center justify-center gap-2 bg-accent disabled:bg-accent/40 text-bg-deep py-3 px-4 rounded-xl font-bold text-sm hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed min-h-[44px] cursor-pointer"
-          >
-            <span>Continue to Account</span>
-            <Check className="w-4 h-4" />
-          </motion.button>
-        </div>
+            <button
+              onClick={handleContinue}
+              disabled={!hasSaved}
+              className={`w-full h-11 sm:h-[52px] flex items-center justify-center text-[15px] font-semibold rounded-[14px] transition-colors duration-150 active:scale-[0.99] ${hasSaved
+                ? 'bg-[#00D9A3] text-[#050607] hover:brightness-110'
+                : 'bg-[#101314] text-muted cursor-not-allowed'
+                }`}
+            >
+              Continue
+            </button>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
-};
+}
 
 export default RecoveryPhraseScreen;

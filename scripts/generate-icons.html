@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUIVEX Icon Generator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #050607;
+      color: #F4F6F5;
+      min-height: 100vh;
+      padding: 40px;
+    }
+    h1 { font-size: 24px; margin-bottom: 12px; }
+    p { color: #8B9490; margin-bottom: 32px; }
+    .upload-area {
+      border: 2px dashed #333;
+      border-radius: 16px;
+      padding: 40px;
+      text-align: center;
+      margin-bottom: 32px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    .upload-area:hover { border-color: #16C784; }
+    .upload-area.has-image { border-color: #16C784; background: #101314; }
+    #preview { max-width: 200px; max-height: 200px; margin-top: 16px; border-radius: 12px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: #101314;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+    .card h3 { font-size: 14px; margin-bottom: 8px; }
+    .card p { font-size: 12px; color: #666; margin-bottom: 12px; }
+    .card canvas { border-radius: 8px; margin-bottom: 12px; }
+    button {
+      background: #16C784;
+      color: #050607;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover { background: #0E8F62; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .download-all {
+      width: 100%;
+      padding: 16px;
+      font-size: 16px;
+      margin-top: 24px;
+    }
+    input[type="file"] { display: none; }
+    .info {
+      background: #161A1B;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 32px;
+    }
+    .info h3 { font-size: 14px; margin-bottom: 12px; color: #16C784; }
+    .info ul { list-style: none; font-size: 13px; color: #8B9490; }
+    .info li { padding: 4px 0; }
+    .info code { background: #222; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <h1>QUIVEX Icon Generator</h1>
+  <p>നിന്റെ ലോഗോ അപ്‌ലോഡ് ചെയ്യുക, എല്ലാ സൈസുകളും ഓട്ടോമാറ്റിക്കായി ജനറേറ്റ് ചെയ്യും</p>
+
+  <div class="info">
+    <h3>📁 ജനറേറ്റ് ചെയ്യുന്ന ഫയലുകൾ:</h3>
+    <ul>
+      <li><code>favicon-16x16.png</code> - Browser tab favicon</li>
+      <li><code>favicon-32x32.png</code> - Browser tab favicon (retina)</li>
+      <li><code>qx-icon.png</code> - Default icon (192x192)</li>
+      <li><code>icon-192x192.png</code> - PWA icon</li>
+      <li><code>icon-512x512.png</code> - PWA splash icon</li>
+      <li><code>apple-touch-icon.png</code> - iOS home screen (180x180)</li>
+      <li><code>maskable-icon.png</code> - Android adaptive icon (512x512)</li>
+    </ul>
+  </div>
+
+  <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+    <p>📤 ക്ലിക്ക് ചെയ്ത് ലോഗോ സെലക്ട് ചെയ്യുക</p>
+    <p style="font-size: 12px; margin-top: 8px;">PNG, JPG, or SVG (Square recommended)</p>
+    <img id="preview" style="display: none;">
+  </div>
+  <input type="file" id="fileInput" accept="image/*">
+
+  <div class="grid" id="iconGrid"></div>
+
+  <button class="download-all" id="downloadAll" disabled onclick="downloadAllIcons()">
+    ⬇️ എല്ലാ ഐക്കണുകളും ഡൗൺലോഡ് ചെയ്യുക
+  </button>
+
+  <script>
+    const sizes = [
+      { name: 'favicon-16x16', size: 16, desc: 'Favicon' },
+      { name: 'favicon-32x32', size: 32, desc: 'Favicon Retina' },
+      { name: 'qx-icon', size: 192, desc: 'Default Icon' },
+      { name: 'icon-192x192', size: 192, desc: 'PWA Icon' },
+      { name: 'icon-512x512', size: 512, desc: 'PWA Splash' },
+      { name: 'apple-touch-icon', size: 180, desc: 'iOS Icon' },
+      { name: 'maskable-icon', size: 512, desc: 'Android Adaptive', maskable: true },
+    ];
+
+    let sourceImage = null;
+    const canvases = {};
+
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          sourceImage = img;
+          
+          // Show preview
+          const preview = document.getElementById('preview');
+          preview.src = event.target.result;
+          preview.style.display = 'block';
+          document.getElementById('uploadArea').classList.add('has-image');
+          
+          // Generate all icons
+          generateIcons();
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function generateIcons() {
+      const grid = document.getElementById('iconGrid');
+      grid.innerHTML = '';
+
+      sizes.forEach(({ name, size, desc, maskable }) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        // Background for maskable icons (with padding)
+        if (maskable) {
+          ctx.fillStyle = '#050607';
+          ctx.fillRect(0, 0, size, size);
+          const padding = size * 0.1; // 10% padding for safe zone
+          const drawSize = size - (padding * 2);
+          ctx.drawImage(sourceImage, padding, padding, drawSize, drawSize);
+        } else {
+          ctx.drawImage(sourceImage, 0, 0, size, size);
+        }
+
+        canvases[name] = canvas;
+
+        // Display size for preview
+        const displaySize = Math.min(size, 128);
+        canvas.style.width = displaySize + 'px';
+        canvas.style.height = displaySize + 'px';
+
+        card.innerHTML = `<h3>${name}.png</h3><p>${size}x${size} - ${desc}</p>`;
+        card.appendChild(canvas);
+        
+        const btn = document.createElement('button');
+        btn.textContent = 'Download';
+        btn.onclick = () => downloadIcon(name);
+        card.appendChild(btn);
+
+        grid.appendChild(card);
+      });
+
+      document.getElementById('downloadAll').disabled = false;
+    }
+
+    function downloadIcon(name) {
+      const canvas = canvases[name];
+      const link = document.createElement('a');
+      link.download = name + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function downloadAllIcons() {
+      Object.keys(canvases).forEach((name, index) => {
+        setTimeout(() => downloadIcon(name), index * 200);
+      });
+    }
+  </script>
+</body>
+</html>
