@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 import { Copy, Check, Eye, EyeOff, Lock, ShieldCheck, ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { ConnectionStatus } from '../components/system/ConnectionStatus';
 
 interface RecoveryPhraseScreenProps {
@@ -47,6 +48,7 @@ const RecoveryPhraseScreen: React.FC<RecoveryPhraseScreenProps> = ({ phrase, onC
   const [isRevealed, setIsRevealed] = useState(false);
   const [hasSaved, setHasSaved] = useState(false);
   const [hasCopied, setHasCopied] = useState(false);
+  const navigate = useNavigate();
 
   const words = phrase.split(' ');
 
@@ -59,47 +61,8 @@ const RecoveryPhraseScreen: React.FC<RecoveryPhraseScreenProps> = ({ phrase, onC
     setTimeout(() => setHasCopied(false), 2000);
   };
 
-  const handleBack = (e: React.MouseEvent) => {
-    // Find the fiber node of the clicked element to traverse to App component
-    let el = e.currentTarget as any;
-    let fiber = null;
-    for (const key in el) {
-      if (key.startsWith('__reactFiber$') || key.startsWith('__reactContainer$')) {
-        fiber = el[key];
-        break;
-      }
-    }
-    
-    if (!fiber) {
-      const mainEl = document.querySelector('.min-h-screen') || document.querySelector('.h-full');
-      if (mainEl) {
-        for (const key in mainEl) {
-          if (key.startsWith('__reactFiber$')) {
-            fiber = (mainEl as any)[key];
-            break;
-          }
-        }
-      }
-    }
-
-    while (fiber) {
-      if (fiber.type && (fiber.type.name === 'App' || fiber.type.displayName === 'App')) {
-        let hook = fiber.memoizedState;
-        while (hook) {
-          if (hook.queue && typeof hook.queue.dispatch === 'function') {
-            if (hook.memoizedState === 'recovery-phrase') {
-              hook.queue.dispatch('display-name');
-              return;
-            }
-          }
-          hook = hook.next;
-        }
-      }
-      fiber = fiber.return;
-    }
-
-    // Fallback if fiber traversal fails
-    window.location.reload();
+  const handleBack = () => {
+    navigate('/display-name');
   };
 
   return (

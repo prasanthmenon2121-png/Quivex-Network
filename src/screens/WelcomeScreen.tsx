@@ -9,15 +9,7 @@ interface WelcomeScreenProps {
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onCreate, onRestore }) => {
   return (
-    <div className="fixed inset-0 bg-bg-deep flex items-center justify-center p-2.5 overflow-hidden">
-      {/* App Frame */}
-      <div
-        className="relative w-full h-full rounded-2xl overflow-hidden flex flex-col"
-        style={{
-          background: 'var(--bg)',
-          border: '1px solid var(--border)',
-        }}
-      >
+    <div className="fixed inset-0 bg-bg flex flex-col overflow-hidden">
         {/* TOP NAV */}
         <nav className="relative z-20 flex items-start justify-between px-8 pt-5 pb-2 shrink-0">
           <div className="flex flex-col gap-0.5">
@@ -98,7 +90,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onCreate, onRestore }) =>
             <OrbitalGlobeMini />
           </div>
         </div>
-      </div>
     </div>
   );
 };
